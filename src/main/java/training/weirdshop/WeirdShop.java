@@ -10,6 +10,7 @@ class WeirdShop {
     void updateQuality() {
         for (Item item : items) {
             boolean isPremium = item.name.contains("Premium");
+            if (!item.name.contains("Gold Coin")) item.sellIn--;
             if (item.name.contains("Backstage Pass")) updateBackStage(item, isPremium);
             else if (item.name.contains("Aged Brie")) updateAgedBrie(item, isPremium);
             else if (!item.name.contains("Gold Coin")) updateOtherItems(item, isPremium);
@@ -17,13 +18,11 @@ class WeirdShop {
     }
 
     private void updateAgedBrie(Item item, boolean isPremium) {
-        item.sellIn--;
         if (item.quality < 50) increaseQuality(item, isPremium);
         capQuality(item);
     }
 
     private void updateBackStage(Item item, boolean isPremium) {
-        item.sellIn--;
         if (item.quality < 50) increaseQuality(item, isPremium);
         if (item.quality < 50 && item.sellIn <= 10) increaseQuality(item, isPremium);
         if (item.quality < 50 && item.sellIn <= 5) increaseQuality(item, isPremium);
@@ -32,9 +31,8 @@ class WeirdShop {
     }
 
     private void updateOtherItems(Item item, boolean isPremium) {
-        item.sellIn--;
         if (item.quality > 0) decreaseQuality(item, isPremium);
-        if (item.sellIn < 0 && item.quality > 0) decreaseQuality(item, isPremium);
+        if (item.quality > 0 && item.sellIn < 0) decreaseQuality(item, isPremium);
         capQuality(item);
     }
 
